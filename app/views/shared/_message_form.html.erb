@@ -1,0 +1,8 @@
+<%= form_for(@message) do |f| %>
+  <%= render "shared/error_messages", object: f.object %>
+  <div class="field">
+    <%= f.text_area :content,placeholder: "Tell him/her message..." %>
+  </div>
+  <%= f.submit "Send message",class: "btn btn-primary" %>
+<% end %>
+

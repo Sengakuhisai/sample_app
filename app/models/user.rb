@@ -8,6 +8,10 @@ class User < ApplicationRecord
                     dependent: :destroy
   has_many :following,through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
+  has_many :sent_users,class_name: "Message",foreign_key: "user_id",dependent: :destroy
+  has_many :got_users,class_name: "Message",foregin_key: "to_id",dependent: :destroy
+  has_many :sent_msgs,through: :sent_users
+  has_many :got_msgs,through: :got_users
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save   :downcase_email
   before_create :create_activation_digest
