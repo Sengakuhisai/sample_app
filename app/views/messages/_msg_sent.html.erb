@@ -1,0 +1,11 @@
+<%= @msgs.each do |msg| %>
+  <li id="message-<%= msg.id %>" %>
+    <% @to_user=User.find(msg.to_id) %>
+    <%= link_to gravatar_for(@to_user,size: 50),@to_user %>
+    <span class="user"><%= link_to @to_user.name,@to_user %></span>
+    <span class="content"><%= link_to msg.content.truncate(50),"#" %></span>
+    <span class="timestamp">
+      Sent  <%= time_ago_in_words(msg.created_at) %> ago.
+    </span>
+  </li>
+<% end %>

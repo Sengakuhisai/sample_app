@@ -66,7 +66,6 @@ class UsersController < ApplicationController
     @title="Msgs you sent"
     @user=User.find(params[:id])
     @msgs=@user.sends.paginate(page: params[:page])
-    # @users=@user.sentmsgs.paginate(page: params[:page])
     render"show_msgs"
   end
   
@@ -74,7 +73,6 @@ class UsersController < ApplicationController
     @title="Msgs you got"
     @user=User.find(params[:id])
     @msgs=@user.recieves.paginate(page: params[:page])
-    # @users=@user.gotmsgs.paginate(page: params[:page])
     render"show_msgs"
   end
   

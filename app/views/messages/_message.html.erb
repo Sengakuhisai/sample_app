@@ -1,8 +1,0 @@
-<li id="message-<%= msg.id %>" %>
-  <%= link_to gravatar_for(msg.user,size: 50),msg.user %>
-  <span class="user"><%= link_to msg.user.name,message.user %></span>
-  <span class="content"><%= link_to msg.content.truncate(50),"#" %></span>
-  <span class="timestamp">
-    Sent  <%= time_ago_in_words(msg.created_at) %> ago.
-  </span>
-</li>
