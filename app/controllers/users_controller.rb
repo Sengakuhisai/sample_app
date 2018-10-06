@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     redirect_to root_url and return unless @user.activated?
     @microposts=@user.microposts.paginate(page: params[:page])
-    @message=current_user.sends.build(to_id: params[:id])
+    @message=current_user.sends.build(content: params[:content],to_id: params[:id])
   end  
 
   def new
@@ -64,14 +64,14 @@ class UsersController < ApplicationController
   end
   
   def sentmsgs
-    @title="Msgs you sent"
+    @title="Messeges you sent"
     @user=User.find(params[:id])
     @msgs=@user.sends.paginate(page: params[:page])
     render"show_msgs"
   end
   
   def gotmsgs
-    @title="Msgs you got"
+    @title="Messages you got"
     @user=User.find(params[:id])
     @msgs=@user.recieves.paginate(page: params[:page])
     render"show_msgs"

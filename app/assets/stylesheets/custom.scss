@@ -298,6 +298,10 @@ span.picture {
 .messages {
   list-style: none;
   padding: 0;
+  .switch{
+    margin-bottom:10px;
+    a{color:#fff}
+  }
   li {
     padding: 10px 0;
     border-top: 1px solid #e8e8e8;
@@ -309,10 +313,8 @@ span.picture {
   .content {
     display: block;
     margin-left: 60px;
-    img {
-      display: block;
-      padding: 5px 0;
-    }
+    text-decolation: none;
+    a{color: $gray-darker}
   }
   .timestamp {
     color: $gray-light;
