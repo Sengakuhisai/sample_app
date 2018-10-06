@@ -5,7 +5,7 @@
       <%= gravatar_for@user %>
       <h1><%= @user.name %></h1>
       <span><%= link_to "view my profile",@user %></span>
-      <span><b>Messages:</b><%= @user.recieves.count %></span>
+      <span><b>Got messages:</b><%= @user.recieves.count %></span>
     </section>
     <section class="stats">
       <%= render "shared/stats" %>
@@ -15,11 +15,26 @@
     <h3><%= @title %></h3>
     <% if @msgs.any? %>
       <ol class="messages">
-          <% if @title="Msgs you sent" %>
-            <%= render "messages/msg_sent" %>
+        <div class="switch">
+          <span class="btn"><%= link_to "Got messages",gotmsgs_user_path(@user) %></span>
+          <span class="btn"><%= link_to "Sent messages",sentmsgs_user_path(@user) %></span>
+        </div>
+
+        <% @msgs.each do |msg| %>
+          <% if @title=="Msgs you got" %>
+            <% @msg_user=User.find(msg.from_id) %>
           <% else %>
-            <%= render "messages/msg_got" %>
+            <% @msg_user=User.find(msg.to_id) %>
           <% end %>
+          <li id="message-<%= msg.id %>" %>
+            <%= link_to gravatar_for(@msg_user,size: 50),@msg_user %>
+            <span class="user"><%= link_to @msg_user.name,@msg_user %></span>
+            <span class="content"><%= link_to msg.content.truncate(50),"#" %></span>
+            <span class="timestamp">
+              Sent  <%= time_ago_in_words(msg.created_at) %> ago.
+            </span>
+          </li>
+        <% end %>
       </ol>
       <%= will_paginate @msgs %>
     <% end %>

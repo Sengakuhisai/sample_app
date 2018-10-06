@@ -11,6 +11,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     redirect_to root_url and return unless @user.activated?
     @microposts=@user.microposts.paginate(page: params[:page])
+    @message=current_user.sends.build(to_id: params[:id])
   end  
 
   def new
