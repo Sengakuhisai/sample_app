@@ -12,10 +12,12 @@
     </strong>
     followers
   </a>
+  <% if @user==current_user %>
   <a href="<%= gotmsgs_user_path(@user) %>">
     <strong id="got_msg" class="stat">
       <%= @user.recieves.count %>
     </strong>
     msgs you got
   </a>
+  <% end %>
 </div>

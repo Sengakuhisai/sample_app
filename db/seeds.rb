@@ -20,7 +20,7 @@ end
               
 users=User.order(:created_at).drop(1).take(6)
 40.times do
-  content=Faker::Lorem.sentence(8)
+  content=Faker::Lorem.sentence(12)
   users.each{|user| user.sends.create!(content: content,to_id: rand(1..6))}
 end
 

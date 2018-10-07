@@ -12,7 +12,23 @@
           <li id="message-<%= msg.id %>" %>
             <%= link_to gravatar_for(@msg_user,size: 50),@msg_user %>
             <span class="user"><%= link_to @msg_user.name,@msg_user %></span>
-            <span class="content"><%= link_to msg.content.truncate(80),"#" %></span>
+            <span class="content">
+              <% if msg.content.length > 80 %>
+                <div class= 'textControl<%= msg.id %>'><%= truncate(msg.content,length: 80) %></div>
+                <div class= 'textControl<%= msg.id %>' style='display: none;'><%= msg.content %>  </div>
+                <%= link_to '...Read more', '', class: "readmore#{msg.id} textControl#{msg.id}" %>
+
+                <script>
+                  $('.readmore<%= msg.id %>').on('click', function(e) {
+                    e.preventDefault();
+                    $('.textControl<%= msg.id %>').toggle();
+                    })
+                 </script>
+                 
+              <% else %>
+                <%= msg.content %>
+              <% end %>
+            </span>
             <span class="timestamp">
               Sent  <%= time_ago_in_words(msg.created_at) %> ago.
             </span>
