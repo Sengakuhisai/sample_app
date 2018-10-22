@@ -5,7 +5,7 @@ class Micropost < ApplicationRecord
   validates :user_id,presence: true
   validates :content,presence: true,length: {maximum:140}
   validate :picture_size
-  before_save :confirm_reply_id
+  before_validation :confirm_reply_id
   validate :reply_id_invalid?
   
   private
@@ -21,12 +21,14 @@ class Micropost < ApplicationRecord
       if self.content.match(/@\d+/).present?
         rep_id=self.content.match(/@\d+/)[0][/\d+/].to_i
         self.in_reply_to=rep_id
+      else
+        self.in_reply_to=self.user.id
       end
     end
     
     def reply_id_invalid?
-      if self.in_reply_to.present?
-        errors.add(:in_reply_to,"this ID is unable.The ID is not exists.") unless User.select("id").exists?(id: self.in_reply_to)
+      unless User.select("id").exists?(:id => self.in_reply_to)
+          errors.add(:in_reply_to,"this ID is unable.The ID is not exists.")
       end
     end
 
