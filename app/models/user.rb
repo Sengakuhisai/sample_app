@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                :integer          not null, primary key
+#  activated         :boolean          default(FALSE)
+#  activated_at      :datetime
+#  activation_digest :string
+#  admin             :boolean          default(FALSE)
+#  email             :string
+#  name              :string
+#  password_digest   :string
+#  remember_digest   :string
+#  reset_digest      :string
+#  reset_sent_at     :datetime
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_email  (email) UNIQUE
+#  index_users_on_name   (name)
+#
+
 class User < ApplicationRecord
   has_many :microposts,dependent: :destroy
   has_many :active_relationships,class_name: "Relationship",
@@ -89,8 +113,8 @@ class User < ApplicationRecord
   def feed
     following_ids="SELECT followed_id FROM relationships
                     WHERE follower_id= :user_id"
-    Micropost.where("(user_id IN (#{following_ids})
-      OR user_id= :user_id )AND(in_reply_to= :user_id OR user_id==in_reply_to",user_id: id)
+    Micropost.where("user_id IN (#{following_ids})
+      OR user_id= :user_id OR in_reply_to= :in_reply_to",user_id: id , in_reply_to: id)
   end
   
   #ユーザーをフォローする
