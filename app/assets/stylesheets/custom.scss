@@ -262,6 +262,11 @@ input {
   .content {
     display: block;
     margin-left: 60px;
+    .reply{
+      border-radius: 10%;
+      background-color: #58ACFA;
+      color: #fff;
+    }
     img {
       display: block;
       padding: 5px 0;

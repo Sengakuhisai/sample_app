@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: microposts
+#
+#  id          :integer          not null, primary key
+#  content     :text
+#  user_id     :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  picture     :string
+#  in_reply_to :string
+#
+
 require 'test_helper'
 
 class MicropostTest < ActiveSupport::TestCase

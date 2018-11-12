@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                :integer          not null, primary key
+#  name              :string
+#  email             :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  password_digest   :string
+#  remember_digest   :string
+#  admin             :boolean          default(FALSE)
+#  activation_digest :string
+#  activated         :boolean          default(FALSE)
+#  activated_at      :datetime
+#  reset_digest      :string
+#  reset_sent_at     :datetime
+#
+
 class User < ApplicationRecord
   has_many :microposts,dependent: :destroy
   has_many :active_relationships,class_name: "Relationship",
@@ -88,9 +107,10 @@ class User < ApplicationRecord
   #ユーザーのステータスフィードを返す
   def feed
     following_ids="SELECT followed_id FROM relationships
-                    WHERE follower_id= :user_id"
-    Micropost.where("(user_id IN (#{following_ids})
-      OR user_id= :user_id )AND(in_reply_to= :user_id OR user_id==in_reply_to",user_id: id)
+                    WHERE follower_id = :user_id"
+    Micropost.where("user_id IN (#{following_ids})
+      OR user_id= :user_id ",user_id: id)
+      .or(Micropost.where("in_reply_to = :user_id",user_id: id))
   end
   
   #ユーザーをフォローする
