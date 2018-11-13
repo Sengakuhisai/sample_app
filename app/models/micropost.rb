@@ -32,15 +32,15 @@ class Micropost < ApplicationRecord
     end
     
     def confirm_reply_id
-      if self.content.match(/@\d+/).present?
-        rep_id=self.content.match(/@\d+/)[0][/\d+/].to_i
-        self.in_reply_to=rep_id
+      if content.match(/@\d+/).present?
+        rep_id = content.match(/@\d+/)[0][/\d+/].to_i
+        self.in_reply_to = rep_id
       end
     end
     
     def reply_id_invalid?
       return if in_reply_to.nil?
-      unless User.select("id").exists?(:id => self.in_reply_to)
+      unless User.select("id").exists?(:id => in_reply_to)
           errors.add(:in_reply_to,"this ID is unable.The ID is not exists.")
       end
     end

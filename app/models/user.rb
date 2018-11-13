@@ -90,7 +90,7 @@ class User < ApplicationRecord
 
   # パスワード再設定の属性を設定する
   def create_reset_digest
-    self.reset_token=User.new_token
+    self.reset_token = User.new_token
     update_columns(reset_digest: User.digest(reset_token), reset_sent_at: Time.zone.now)
   end
 
@@ -106,11 +106,9 @@ class User < ApplicationRecord
   
   #ユーザーのステータスフィードを返す
   def feed
-    following_ids="SELECT followed_id FROM relationships
-                    WHERE follower_id = :user_id"
-    Micropost.where("user_id IN (#{following_ids})
-      OR user_id= :user_id ",user_id: id)
+    Micropost.where(user: followers).or(Micropost.where(user: self))
       .or(Micropost.where("in_reply_to = :user_id",user_id: id))
+    
   end
   
   #ユーザーをフォローする

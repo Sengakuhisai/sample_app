@@ -3,12 +3,12 @@ class MessagesController < ApplicationController
   before_action :correct_user, only: :destroy
   
   def create
-    @message=current_user.sends.build(msg_params)
+    @message = current_user.sends.build( msg_params )
     if @message.save
       flash[:success] = "A message is sent."
       redirect_to user_path(params[:message][:to_id])
     else
-      flash[:danger]="You missed to send."
+      flash[:danger] = "You missed to send."
       redirect_to user_path(params[:message][:to_id])
     end
   end
