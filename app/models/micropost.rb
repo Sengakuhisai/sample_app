@@ -19,25 +19,24 @@ class Micropost < ApplicationRecord
   validates :content,presence: true,length: {maximum:140}
   validate :picture_size
   before_validation :confirm_reply_id
-
   validate :reply_id_invalid?
-  
+
   private
-  
+
     #アップロードされた画像のサイズをバリデーションする
     def picture_size
       if picture.size > 5.megabytes
         errors.add(:picture,"should be less than 5MB")
       end
     end
-    
+
     def confirm_reply_id
       if content.match(/@\d+/).present?
         rep_id = content.match(/@\d+/)[0][/\d+/].to_i
         self.in_reply_to = rep_id
       end
     end
-    
+
     def reply_id_invalid?
       return if in_reply_to.nil?
       unless User.select("id").exists?(:id => in_reply_to)

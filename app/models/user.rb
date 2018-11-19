@@ -41,43 +41,43 @@ class User < ApplicationRecord
                     uniqueness: { case_sensitive: false }
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
-  
+
   # 渡された文字列のハッシュ値を返す
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
                                                   BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
   end
-  
+
   # ランダムなトークンを返す
   def User.new_token
     SecureRandom.urlsafe_base64
   end
-  
+
   # 永続セッションのためにユーザーをデータベースに記憶する
   def remember
     self.remember_token = User.new_token
     update_attribute(:remember_digest, User.digest(remember_token))
   end
-  
+
   # 渡されたトークンがダイジェストと一致したらtrueを返す
   def authenticated?(remember_token)
     return false if remember_digest.nil?
     BCrypt::Password.new(remember_digest).is_password?(remember_token)
   end
-  
+
   # ユーザーのログイン情報を破棄する
   def forget
     update_attribute(:remember_digest, nil)
   end
-  
+
   # トークンがダイジェストと一致したらtrueを返す
   def authenticated?(attribute, token)
     digest = send("#{attribute}_digest")
     return false if digest.nil?
     BCrypt::Password.new(digest).is_password?(token)
   end
-  
+
   # アカウントを有効にする
   def activate
     update_columns(activated: true, activated_at: Time.zone.now)
@@ -98,34 +98,33 @@ class User < ApplicationRecord
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
   end
-  
+
   # パスワード再設定の期限が切れている場合はtrueを返す
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
   end
-  
+
   #ユーザーのステータスフィードを返す
   def feed
     Micropost.where(user: followers).or(Micropost.where(user: self))
       .or(Micropost.where("in_reply_to = :user_id",user_id: id))
-    
   end
-  
+
   #ユーザーをフォローする
   def follow(other_user)
     following << other_user
   end
-  
+
   #ユーザーをフォロー解除する
   def unfollow(other_user)
     active_relationships.find_by(followed_id: other_user.id).destroy
   end
-  
+
   #現在のユーザーがフォローしてたらtrueを返す
   def following?(other_user)
     following.include?(other_user)
   end
-  
+
 
   private
 

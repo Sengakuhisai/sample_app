@@ -3,7 +3,8 @@
   <span class="user"><%= link_to micropost.user.name, micropost.user %>   ID:<%= micropost.user.id %></span>
   <span class="content">
     <% unless micropost.in_reply_to.nil? %><b class="reply"> reply </b><% end %>
-     <%= micropost.content %>
+     <% cont=micropost.content %>
+     <%= highlight(cont ,/@\d+/ ,highlighter: '<a href="users/\1.slice!(0)">\1</a>') %>
     <%= image_tag micropost.picture.url if micropost.picture? %>
   </span>
   <span class="timestamp">
