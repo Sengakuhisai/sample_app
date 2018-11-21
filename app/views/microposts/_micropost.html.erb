@@ -4,7 +4,7 @@
   <span class="content">
     <% unless micropost.in_reply_to.nil? %><b class="reply"> reply </b><% end %>
      <% cont=micropost.content  %>
-     <%= highlight(cont ,/@\d+/){ |match| link_to match , users_path(match.slice(/\d+/))} %>
+     <%= highlight(cont ,/@\d+/){ |match| link_to match , user_path(match.slice(/\d+/))} %>
     <%= image_tag micropost.picture.url if micropost.picture? %>
   </span>
   <span class="timestamp">
